@@ -1,0 +1,88 @@
+{
+  "config": {
+    "flow_title": "{name}",
+    "step": {
+      "user": {
+        "title": "Choose your heat pump",
+        "description": "Home Assistant found these Remeha Bluetooth modules.",
+        "data": {
+          "address": "Module"
+        }
+      },
+      "pin": {
+        "title": "Enter the PIN",
+        "description": "Found **{name}**.\n\nType the 6-digit PIN from the sticker on the Bluetooth module of the heat pump. Connecting takes up to a minute.",
+        "data": {
+          "pin": "PIN (6 digits)"
+        }
+      }
+    },
+    "error": {
+      "pin_format": "The PIN has 6 digits.",
+      "invalid_pin": "The module refused this PIN. Check the sticker and wait 1 minute before trying again.",
+      "cannot_connect": "Could not connect. Is Home Assistant close enough to the heat pump? If the Remeha app on a phone is connected, close it. Then try again.",
+      "auth_failed": "Connected, but the module did not answer. Try again."
+    },
+    "abort": {
+      "already_configured": "This heat pump is already set up.",
+      "no_devices_found": "No Remeha Bluetooth module found. Make sure Bluetooth works in Home Assistant and the heat pump is close enough."
+    }
+  },
+  "entity": {
+    "sensor": {
+      "cop": {
+        "name": "COP"
+      },
+      "spf": {
+        "name": "Average COP (SPF)"
+      },
+      "outdoor_temperature": {
+        "name": "Outdoor temperature"
+      },
+      "flow_temperature": {
+        "name": "Flow temperature"
+      },
+      "heat_pump_flow_temperature": {
+        "name": "Heat pump flow temperature"
+      },
+      "return_temperature": {
+        "name": "Return temperature"
+      },
+      "flow_setpoint": {
+        "name": "Flow setpoint"
+      },
+      "dhw_temperature": {
+        "name": "Hot water temperature"
+      },
+      "dhw_setpoint": {
+        "name": "Hot water setpoint"
+      },
+      "water_pressure": {
+        "name": "Water pressure"
+      },
+      "energy_consumed_total": {
+        "name": "Electricity used total"
+      },
+      "energy_consumed_heating": {
+        "name": "Electricity used heating"
+      },
+      "energy_consumed_dhw": {
+        "name": "Electricity used hot water"
+      },
+      "energy_delivered_total": {
+        "name": "Heat delivered total"
+      },
+      "energy_delivered_heating": {
+        "name": "Heat delivered heating"
+      },
+      "energy_delivered_dhw": {
+        "name": "Heat delivered hot water"
+      }
+    }
+  },
+  "device": {
+    "heat_pump": {
+      "name": "Heat pump"
+    }
+  }
+}

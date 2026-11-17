@@ -1,0 +1,88 @@
+{
+  "config": {
+    "flow_title": "{name}",
+    "step": {
+      "user": {
+        "title": "Kies je warmtepomp",
+        "description": "Home Assistant heeft deze Remeha Bluetooth-modules gevonden.",
+        "data": {
+          "address": "Module"
+        }
+      },
+      "pin": {
+        "title": "Vul de pincode in",
+        "description": "**{name}** gevonden.\n\nTyp de 6-cijferige pincode van de sticker op de Bluetooth-module van de warmtepomp. Verbinden duurt tot een minuut.",
+        "data": {
+          "pin": "Pincode (6 cijfers)"
+        }
+      }
+    },
+    "error": {
+      "pin_format": "De pincode heeft 6 cijfers.",
+      "invalid_pin": "De module weigert deze pincode. Controleer de sticker en wacht 1 minuut voor je het opnieuw probeert.",
+      "cannot_connect": "Geen verbinding. Staat Home Assistant dicht genoeg bij de warmtepomp? Is de Remeha-app op een telefoon verbonden, sluit die dan. Probeer het daarna opnieuw.",
+      "auth_failed": "Verbonden, maar de module gaf geen antwoord. Probeer het opnieuw."
+    },
+    "abort": {
+      "already_configured": "Deze warmtepomp is al toegevoegd.",
+      "no_devices_found": "Geen Remeha Bluetooth-module gevonden. Controleer of Bluetooth werkt in Home Assistant en of de warmtepomp dichtbij genoeg is."
+    }
+  },
+  "entity": {
+    "sensor": {
+      "cop": {
+        "name": "COP"
+      },
+      "spf": {
+        "name": "Gemiddelde COP (SPF)"
+      },
+      "outdoor_temperature": {
+        "name": "Buitentemperatuur"
+      },
+      "flow_temperature": {
+        "name": "Aanvoertemperatuur"
+      },
+      "heat_pump_flow_temperature": {
+        "name": "Aanvoertemperatuur warmtepomp"
+      },
+      "return_temperature": {
+        "name": "Retourtemperatuur"
+      },
+      "flow_setpoint": {
+        "name": "Gewenste aanvoertemperatuur"
+      },
+      "dhw_temperature": {
+        "name": "Warmwatertemperatuur"
+      },
+      "dhw_setpoint": {
+        "name": "Gewenste warmwatertemperatuur"
+      },
+      "water_pressure": {
+        "name": "Waterdruk"
+      },
+      "energy_consumed_total": {
+        "name": "Stroomverbruik totaal"
+      },
+      "energy_consumed_heating": {
+        "name": "Stroomverbruik verwarming"
+      },
+      "energy_consumed_dhw": {
+        "name": "Stroomverbruik warm water"
+      },
+      "energy_delivered_total": {
+        "name": "Geleverde warmte totaal"
+      },
+      "energy_delivered_heating": {
+        "name": "Geleverde warmte verwarming"
+      },
+      "energy_delivered_dhw": {
+        "name": "Geleverde warmte warm water"
+      }
+    }
+  },
+  "device": {
+    "heat_pump": {
+      "name": "Warmtepomp"
+    }
+  }
+}

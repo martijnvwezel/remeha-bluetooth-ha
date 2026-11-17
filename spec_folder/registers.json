@@ -1,0 +1,271 @@
+{
+ "block_0x501d_sub0_el1_int16LE": {
+  "0": [
+   "internal_flow_setpoint_AM101",
+   "C",
+   100
+  ],
+  "2": [
+   "hp_flow_setpoint_HM003",
+   "C",
+   100
+  ],
+  "4": [
+   "flow_temp_AM016",
+   "C",
+   100
+  ],
+  "8": [
+   "hp_flow_temp_HM001",
+   "C",
+   100
+  ],
+  "10": [
+   "inverter_temp_HM094",
+   "C",
+   100
+  ],
+  "12": [
+   "outdoor_temp_AM027",
+   "C",
+   100
+  ],
+  "14": [
+   "odu_flow_temp_HM185",
+   "C",
+   100
+  ],
+  "16": [
+   "odu_return_temp_HM186",
+   "C",
+   100
+  ],
+  "18": [
+   "dhw_tank_bottom_DM001",
+   "C",
+   100
+  ],
+  "22": [
+   "dhw_setpoint_DM029",
+   "C",
+   100
+  ],
+  "24": [
+   "compressor_suction_temp",
+   "C",
+   100
+  ],
+  "26": [
+   "compressor_discharge_temp",
+   "C",
+   100
+  ],
+  "28": [
+   "odu_evaporator_air_temp",
+   "C",
+   100
+  ],
+  "40": [
+   "water_pressure_AM019",
+   "bar",
+   100
+  ],
+  "56": [
+   "cop_HM031",
+   "",
+   1000
+  ],
+  "58": [
+   "odu_fan_speed",
+   "rpm",
+   1
+  ],
+  "62": [
+   "eev_opening",
+   "pulses",
+   1
+  ],
+  "76": [
+   "pump_speed_AM010",
+   "%",
+   10
+  ],
+  "104": [
+   "odu_supply_voltage_HM096",
+   "V",
+   1
+  ],
+  "_na_sensor_not_present_offsets": [
+   20,
+   30,
+   32,
+   34,
+   36,
+   38,
+   64
+  ],
+  "_note": "offsets>40 are Confida-verified; may differ on other models - verify vs app"
+ },
+ "energy_counters_read_by_index_uint32LE": {
+  "0x5089.0": [
+   "delivered_energy_total",
+   "kWh",
+   1
+  ],
+  "0x5085.0": [
+   "delivered_heating",
+   "kWh",
+   1
+  ],
+  "0x5086.0": [
+   "delivered_dhw",
+   "kWh",
+   1
+  ],
+  "0x5087.0": [
+   "delivered_cooling",
+   "kWh",
+   1
+  ],
+  "0x512f.1": [
+   "consumed_energy_total",
+   "kWh",
+   10
+  ],
+  "0x512c.1": [
+   "consumed_heating",
+   "kWh",
+   10
+  ],
+  "0x512d.1": [
+   "consumed_dhw",
+   "kWh",
+   10
+  ],
+  "0x512e.1": [
+   "consumed_cooling",
+   "kWh",
+   10
+  ],
+  "0x508a.0": [
+   "avg_spf_seasonal_cop",
+   "",
+   10
+  ],
+  "0x5000.0": [
+   "power_on_hours",
+   "h",
+   1
+  ],
+  "0x530c.0": [
+   "generator_hours",
+   "h",
+   1
+  ],
+  "0x530b.0": [
+   "generator_starts",
+   "",
+   1
+  ],
+  "0x50ad.0": [
+   "pump_hours",
+   "h",
+   1
+  ],
+  "0x50ae.0": [
+   "pump_starts",
+   "",
+   1
+  ],
+  "0x50af.0": [
+   "backup_hours",
+   "h",
+   1
+  ],
+  "0x50b1.0": [
+   "backup_starts",
+   "",
+   1
+  ],
+  "0x43c1.0": [
+   "defrost_duration",
+   "",
+   1
+  ],
+  "0x43c2.0": [
+   "defrost_cycles",
+   "",
+   1
+  ]
+ },
+ "misc_read_by_index": {
+  "0x5404.1": [
+   "zone_room_temp",
+   "C",
+   10,
+   "int16"
+  ],
+  "0x5419.1": [
+   "zone_room_setpoint",
+   "C",
+   10,
+   "int16"
+  ],
+  "0x4379.0": [
+   "hp_voltage",
+   "V",
+   1,
+   "int16"
+  ],
+  "0x4380.0": [
+   "inverter_temp",
+   "C",
+   100,
+   "int16"
+  ],
+  "0x30a2.0": [
+   "param_edit_count",
+   "",
+   1,
+   "uint16"
+  ],
+  "0x340f.0": [
+   "device_name_string",
+   "",
+   1,
+   "ascii"
+  ]
+ },
+ "enum_AM012_status": {
+  "0": "standby",
+  "1": "heat_demand",
+  "2": "generator_start",
+  "3": "generator_CH",
+  "4": "generator_DHW",
+  "5": "stop",
+  "6": "pump_post_run",
+  "7": "cooling",
+  "8": "controlled_stop",
+  "9": "blocking",
+  "10": "locking",
+  "16": "frost_protection",
+  "69": "defrost_with_hp",
+  "200": "service",
+  "254": "unknown"
+ },
+ "enum_AM014_substatus_key": {
+  "0": "standby",
+  "30": "normal_internal_setpoint",
+  "69": "defrost_with_hp",
+  "81": "outdoor_temp_stop_hp",
+  "_full": "see ../captures/gtw08_status_enums.json"
+ },
+ "enum_SeasonalMode": {
+  "0": "winter",
+  "1": "frost_protection",
+  "2": "summer_neutral",
+  "3": "summer"
+ },
+ "format": "[name, unit, scale(divide), (type)] - value = raw/scale; null if raw in {-32768,-1,0xFFFF,0xFFFFFFFF}",
+ "config_descriptors": "621 configurable params (names not public): ../captures/datapoint_descriptors.json; read via index 0x502b sub1..16"
+}
