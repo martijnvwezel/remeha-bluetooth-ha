@@ -24,7 +24,8 @@ def _info():
         device=dev, advertisement=adv, connectable=True, time=0, tx_power=None)
 
 
-VALUES = {"cop": 3.21, "outdoor_temperature": 7.5, "energy_consumed_total": 230.5}
+VALUES = {"cop": 3.21, "outdoor_temperature": 7.5, "energy_consumed_total": 230.5,
+          "status_code": 4, "substatus_code": 30}
 
 
 def _session():
@@ -75,6 +76,8 @@ async def test_setup_creates_sensors(hass):
     assert states["sensor.heat_pump_cop"] == "3.21"
     assert states["sensor.heat_pump_electricity_used_total"] == "230.5"
     assert states["sensor.heat_pump_water_pressure"] == "unknown"
+    assert states["sensor.heat_pump_status"] == "hot_water"
+    assert states["sensor.heat_pump_sub_status"] == "Normal internal setpoint"
 
 
 class FakeClient:
@@ -105,6 +108,7 @@ async def test_session_decodes():
     block = bytearray(b"\x00\x80" * 61)
     block[56:58] = (3210).to_bytes(2, "little", signed=True)
     block[12:14] = (-525).to_bytes(2, "little", signed=True)
+    block[78:80] = bytes([3, 30])
     fc = FakeClient(bytes(block), {0x512F: (2305).to_bytes(4, "little"), 0x5089: (840).to_bytes(4, "little")})
     s = RemehaSession(fc)
     await s.authenticate()
@@ -113,3 +117,4 @@ async def test_session_decodes():
     assert d["energy_consumed_total"] == 230.5 and d["water_pressure"] is None
     assert d["energy_delivered_total"] == 840 and d["spf"] == 3.64
     assert d["energy_delivered_dhw"] is None
+    assert d["status_code"] == 3 and d["substatus_code"] == 30

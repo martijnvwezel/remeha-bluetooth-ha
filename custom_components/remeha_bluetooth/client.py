@@ -155,6 +155,11 @@ class RemehaSession:
         for key, off, div in BLOCK:
             raw = P.int16_at(block, off)
             values[key] = None if raw is None else round(raw / div, 3)
+        # Byte 78 = AM012 appliance status, byte 79 = AM014 sub status
+        # (verified live: 3/30 while heating, 4/30 while making hot water).
+        if len(block) > 79:
+            values["status_code"] = None if block[78] == 0xFF else block[78]
+            values["substatus_code"] = None if block[79] == 0xFF else block[79]
         for key, index, sub, div in COUNTERS:
             raw = P.uint32(await self.read(index, sub, 1, timeout=3) or b"")
             values[key] = None if raw is None else round(raw / div, 2)

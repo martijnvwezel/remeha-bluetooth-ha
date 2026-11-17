@@ -2,13 +2,21 @@
 
 from __future__ import annotations
 
+from collections.abc import Callable
+from dataclasses import dataclass
+
 from homeassistant.components.sensor import (
     SensorDeviceClass,
     SensorEntity,
     SensorEntityDescription,
     SensorStateClass,
 )
-from homeassistant.const import UnitOfEnergy, UnitOfPressure, UnitOfTemperature
+from homeassistant.const import (
+    EntityCategory,
+    UnitOfEnergy,
+    UnitOfPressure,
+    UnitOfTemperature,
+)
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.device_registry import CONNECTION_BLUETOOTH, DeviceInfo
 from homeassistant.helpers.entity_platform import AddConfigEntryEntitiesCallback
@@ -17,6 +25,24 @@ from homeassistant.helpers.update_coordinator import CoordinatorEntity
 from . import RemehaConfigEntry
 from .const import CONF_SERIAL, DOMAIN
 from .coordinator import RemehaCoordinator
+from .status import STATUS, SUBSTATUS
+
+
+@dataclass(frozen=True, kw_only=True)
+class RemehaSensorDescription(SensorEntityDescription):
+    """Sensor with an optional function turning raw values into a state."""
+
+    value_fn: Callable[[dict], str | float | None] | None = None
+
+
+def _status(values: dict) -> str | None:
+    code = values.get("status_code")
+    return None if code is None else STATUS.get(code, "unknown")
+
+
+def _substatus(values: dict) -> str | None:
+    code = values.get("substatus_code")
+    return None if code is None else SUBSTATUS.get(code, f"Code {code}")
 
 
 def _temp(key: str) -> SensorEntityDescription:
@@ -40,6 +66,17 @@ def _energy(key: str) -> SensorEntityDescription:
 
 
 SENSORS: tuple[SensorEntityDescription, ...] = (
+    RemehaSensorDescription(
+        key="status", translation_key="status",
+        device_class=SensorDeviceClass.ENUM,
+        options=sorted(set(STATUS.values())),
+        value_fn=_status,
+    ),
+    RemehaSensorDescription(
+        key="substatus", translation_key="substatus",
+        entity_category=EntityCategory.DIAGNOSTIC,
+        value_fn=_substatus,
+    ),
     SensorEntityDescription(
         key="cop", translation_key="cop",
         state_class=SensorStateClass.MEASUREMENT, suggested_display_precision=2,
@@ -97,5 +134,9 @@ class RemehaSensor(CoordinatorEntity[RemehaCoordinator], SensorEntity):
         )
 
     @property
-    def native_value(self) -> float | None:
-        return self.coordinator.data.values.get(self.entity_description.key)
+    def native_value(self) -> str | float | None:
+        values = self.coordinator.data.values
+        fn = getattr(self.entity_description, "value_fn", None)
+        if fn is not None:
+            return fn(values)
+        return values.get(self.entity_description.key)

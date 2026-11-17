@@ -77,12 +77,66 @@
       },
       "energy_delivered_dhw": {
         "name": "Geleverde warmte warm water"
+      },
+      "status": {
+        "name": "Status",
+        "state": {
+          "standby": "Stand-by",
+          "heat_demand": "Warmtevraag",
+          "generator_start": "Opstarten",
+          "heating": "Verwarmen",
+          "hot_water": "Warm water",
+          "generator_stop": "Stoppen",
+          "pump_post_run": "Nadraaien pomp",
+          "cooling": "Koelen",
+          "controlled_stop": "Gecontroleerde stop",
+          "blocking": "Blokkering",
+          "locking": "Vergrendeld",
+          "load_test_min": "Belastingstest min",
+          "load_test_ch_max": "Belastingstest verwarming max",
+          "load_test_dhw_max": "Belastingstest warm water max",
+          "manual_heat_demand": "Handmatige warmtevraag",
+          "frost_protection": "Vorstbeveiliging",
+          "deaeration": "Ontluchten",
+          "control_unit_cooling": "Regeleenheid koelen",
+          "reset": "Reset bezig",
+          "auto_filling": "Automatisch vullen",
+          "halted": "Gepauzeerd",
+          "forced_calibration": "Geforceerde kalibratie",
+          "factory_test": "Fabriekstest",
+          "hydronic_balancing": "Hydraulisch inregelen",
+          "device_mode": "Apparaatmodus",
+          "unknown": "Onbekend"
+        }
+      },
+      "substatus": {
+        "name": "Substatus"
       }
     }
   },
   "device": {
     "heat_pump": {
       "name": "Warmtepomp"
+    }
+  },
+  "services": {
+    "read_object": {
+      "name": "Read raw object",
+      "description": "Diagnostics: read one object (index/sub/element) from the gateway and return the raw bytes.",
+      "fields": {
+        "index": {
+          "name": "Index",
+          "description": "Object index, e.g. 0x501d"
+        },
+        "sub": {
+          "name": "Subindex",
+          "description": "Subindex"
+        },
+        "element": {
+          "name": "Element",
+          "description": "Array element (1, or 255 for scalar)"
+        }
+      }
     }
   }
 }

@@ -1,0 +1,19 @@
+read_object:
+  fields:
+    index:
+      required: true
+      example: "0x501d"
+      selector:
+        text:
+    sub:
+      default: 0
+      selector:
+        number:
+          min: 0
+          max: 255
+    element:
+      default: 1
+      selector:
+        number:
+          min: 0
+          max: 255

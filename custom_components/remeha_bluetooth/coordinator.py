@@ -83,6 +83,16 @@ class RemehaCoordinator(DataUpdateCoordinator[RemehaData]):
                 await self._close()
                 raise UpdateFailed(f"No connection with the heat pump: {err}") from err
 
+    async def async_read_raw(self, index: int, sub: int, element: int) -> bytes | None:
+        """Read one object on the open session (diagnostics)."""
+        async with self._lock:
+            if self._session is None or self._client is None or not self._client.is_connected:
+                await self._close()
+                self._client, self._session = await async_open_session(
+                    self.hass, self.address, self._pin
+                )
+            return await self._session.read(index, sub, element)
+
     async def _close(self) -> None:
         client, self._client, self._session = self._client, None, None
         if client is not None:

@@ -77,12 +77,66 @@
       },
       "energy_delivered_dhw": {
         "name": "Heat delivered hot water"
+      },
+      "status": {
+        "name": "Status",
+        "state": {
+          "standby": "Standby",
+          "heat_demand": "Heat demand",
+          "generator_start": "Starting",
+          "heating": "Heating",
+          "hot_water": "Hot water",
+          "generator_stop": "Stopping",
+          "pump_post_run": "Pump post-run",
+          "cooling": "Cooling",
+          "controlled_stop": "Controlled stop",
+          "blocking": "Blocked",
+          "locking": "Locked",
+          "load_test_min": "Load test min",
+          "load_test_ch_max": "Load test heating max",
+          "load_test_dhw_max": "Load test hot water max",
+          "manual_heat_demand": "Manual heat demand",
+          "frost_protection": "Frost protection",
+          "deaeration": "Deaeration",
+          "control_unit_cooling": "Control unit cooling",
+          "reset": "Reset in progress",
+          "auto_filling": "Auto filling",
+          "halted": "Halted",
+          "forced_calibration": "Forced calibration",
+          "factory_test": "Factory test",
+          "hydronic_balancing": "Hydronic balancing",
+          "device_mode": "Device mode",
+          "unknown": "Unknown"
+        }
+      },
+      "substatus": {
+        "name": "Sub status"
       }
     }
   },
   "device": {
     "heat_pump": {
       "name": "Heat pump"
+    }
+  },
+  "services": {
+    "read_object": {
+      "name": "Read raw object",
+      "description": "Diagnostics: read one object (index/sub/element) from the gateway and return the raw bytes.",
+      "fields": {
+        "index": {
+          "name": "Index",
+          "description": "Object index, e.g. 0x501d"
+        },
+        "sub": {
+          "name": "Subindex",
+          "description": "Subindex"
+        },
+        "element": {
+          "name": "Element",
+          "description": "Array element (1, or 255 for scalar)"
+        }
+      }
     }
   }
 }
