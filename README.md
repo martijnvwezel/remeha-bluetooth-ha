@@ -32,11 +32,29 @@ and **electricity used** + **heat delivered** (kWh, works in the Energy dashboar
 No HACS? Copy the folder `custom_components/remeha_bluetooth` into
 `/config/custom_components/` and restart.
 
+## Track the heat pump in the Energy dashboard
+
+See exactly how much electricity the heat pump uses, next to your other devices:
+
+1. Settings → Dashboards → **Energy** (or open the Energy dashboard → ⋮ → *Energy settings*).
+2. Under **Individual devices** click **Add device**.
+3. Pick **Heat pump Electricity used total** → *Save*.
+
+Bars appear from the next full hour. Want the split? Also add
+**Electricity used heating** and **Electricity used hot water** as separate devices
+(don't combine them with *total*, or the usage counts twice).
+
+The heat delivered sensors show how much heat you got for that electricity:
+heat delivered ÷ electricity used = your average COP (also shown as *Average COP (SPF)*).
+
 ## Nederlands, kort
 
 Zet Home Assistant (met Bluetooth) in de buurt van de warmtepomp, installeer deze
 integratie via HACS, herstart, en klik bij *Instellingen → Apparaten & diensten*
 op **Toevoegen** bij `EHC-16_...`. Vul de 6-cijferige pincode van de sticker in. Klaar.
+
+Stroomverbruik volgen: *Energie-instellingen → Individuele apparaten → Apparaat toevoegen*
+→ kies **Heat pump Electricity used total**.
 
 ## Problems
 
