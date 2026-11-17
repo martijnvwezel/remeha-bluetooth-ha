@@ -91,4 +91,8 @@ pytest                        # flow + sensor + protocol tests with a fake gatew
 python3 tools/try_client.py   # talk to a real module from a Linux laptop
 ```
 
+## Support
+
+[!["Buy Me A Coffee"](https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png)](https://www.buymeacoffee.com/muino)
+
 MIT licensed. Not affiliated with Remeha / BDR Thermea.
