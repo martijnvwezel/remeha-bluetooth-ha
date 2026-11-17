@@ -3,6 +3,8 @@
 > Community project. Not made, endorsed or supported by Remeha / BDR Thermea.
 > "Remeha" is used only to say which heat pumps this works with.
 
+[![Open in HACS](https://my.home-assistant.io/badges/hacs_repository.svg)](https://my.home-assistant.io/redirect/hacs_repository/?owner=martijnvwezel&repository=remeha-bluetooth-ha&category=integration)
+
 Read your Remeha heat pump (Confida, Elga Ace, Eria, R290 ...) in Home Assistant
 through the Bluetooth module (EHC-16) that is already in the heat pump.
 No cloud, no account, no extra hardware. You only need the **6-digit PIN** on the
@@ -11,14 +13,16 @@ sticker of the Bluetooth module.
 You get: **COP** (now and average since installation), outdoor / flow / return / hot water temperatures, water pressure,
 and **electricity used** + **heat delivered** (kWh, works in the Energy dashboard).
 
+<img src="docs/sensors.png" width="320" alt="Heat pump sensors in Home Assistant">
+
 ## Install (5 minutes)
 
 1. Home Assistant must be **close to the heat pump** and have Bluetooth
    (built-in Bluetooth or a USB Bluetooth stick on the Home Assistant machine).
 2. Install [HACS](https://hacs.xyz) if you don't have it.
-3. HACS → ⋮ → *Custom repositories* → paste
-   `https://github.com/martijnvwezel/remeha-bluetooth-ha`, type *Integration* → *Add*.
-   Then search **Remeha Bluetooth** in HACS → *Download*.
+3. Click the **Open in HACS** button above (or HACS → ⋮ → *Custom repositories* →
+   `https://github.com/martijnvwezel/remeha-bluetooth-ha`, type *Integration*),
+   then *Download*.
 4. Restart Home Assistant.
 5. Settings → Devices & services. Your heat pump shows up under **Discovered**
    (named `EHC-16_...`). Click **Add**.
@@ -62,4 +66,4 @@ pytest                        # flow + sensor + protocol tests with a fake gatew
 python3 tools/try_client.py   # talk to a real module from a Linux laptop
 ```
 
-Not affiliated with Remeha / BDR Thermea.
+MIT licensed. Not affiliated with Remeha / BDR Thermea.
