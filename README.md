@@ -59,6 +59,8 @@ Settings → Devices & services → **Remeha Bluetooth** → ⚙️ (Configure):
   temperatures, operating hours and starts, defrost cycles, seasonal efficiency
   (AC083) and the heating curve settings (read only).
 
+<img src="docs/options-mode.png" width="320" alt="Choose Simple or Advanced"> <img src="docs/options-advanced.png" width="320" alt="Advanced: tick the datapoints you want">
+
 Every ticked item adds one short Bluetooth read every 30 s. Items you untick
 are removed from Home Assistant. The list lives in
 [`catalog.py`](custom_components/remeha_bluetooth/catalog.py). To add one, add a line there and
