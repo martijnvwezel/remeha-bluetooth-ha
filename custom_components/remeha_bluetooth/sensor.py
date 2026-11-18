@@ -18,13 +18,11 @@ from homeassistant.const import (
     UnitOfTemperature,
 )
 from homeassistant.core import HomeAssistant
-from homeassistant.helpers.device_registry import CONNECTION_BLUETOOTH, DeviceInfo
 from homeassistant.helpers.entity_platform import AddConfigEntryEntitiesCallback
-from homeassistant.helpers.update_coordinator import CoordinatorEntity
 
 from . import RemehaConfigEntry
-from .const import CONF_SERIAL, DOMAIN
-from .coordinator import RemehaCoordinator
+from .catalog import Extra
+from .entity import RemehaEntity
 from .status import STATUS, SUBSTATUS
 
 
@@ -107,36 +105,32 @@ SENSORS: tuple[SensorEntityDescription, ...] = (
 )
 
 
+def _extra_description(e: Extra) -> SensorEntityDescription:
+    return SensorEntityDescription(
+        key=e.key, translation_key=e.key,
+        native_unit_of_measurement=e.unit,
+        device_class=SensorDeviceClass(e.device_class) if e.device_class else None,
+        state_class=SensorStateClass(e.state_class) if e.state_class else None,
+        suggested_display_precision=e.precision,
+        entity_category=EntityCategory.DIAGNOSTIC if e.diagnostic else None,
+    )
+
+
 async def async_setup_entry(
     hass: HomeAssistant,
     entry: RemehaConfigEntry,
     async_add_entities: AddConfigEntryEntitiesCallback,
 ) -> None:
     coordinator = entry.runtime_data
-    async_add_entities(RemehaSensor(coordinator, d) for d in SENSORS)
+    descriptions = list(SENSORS)
+    descriptions += [_extra_description(e) for e in coordinator.extras if not e.binary]
+    async_add_entities(RemehaSensor(coordinator, d) for d in descriptions)
 
 
-class RemehaSensor(CoordinatorEntity[RemehaCoordinator], SensorEntity):
-    _attr_has_entity_name = True
-
-    def __init__(self, coordinator: RemehaCoordinator, desc: SensorEntityDescription) -> None:
-        super().__init__(coordinator)
-        self.entity_description = desc
-        address = coordinator.address
-        self._attr_unique_id = f"{address}_{desc.key}"
-        self._attr_device_info = DeviceInfo(
-            identifiers={(DOMAIN, address)},
-            connections={(CONNECTION_BLUETOOTH, address)},
-            manufacturer="Remeha",
-            model="EHC-16 Bluetooth module",
-            serial_number=coordinator.config_entry.data.get(CONF_SERIAL),
-            translation_key="heat_pump",
-        )
-
+class RemehaSensor(RemehaEntity, SensorEntity):
     @property
     def native_value(self) -> str | float | None:
-        values = self.coordinator.data.values
         fn = getattr(self.entity_description, "value_fn", None)
         if fn is not None:
-            return fn(values)
-        return values.get(self.entity_description.key)
+            return fn(self.coordinator.data.values)
+        return self._value

@@ -11,11 +11,32 @@ from homeassistant.components.bluetooth import (
     BluetoothServiceInfoBleak,
     async_discovered_service_info,
 )
-from homeassistant.config_entries import ConfigFlow, ConfigFlowResult
+from homeassistant.config_entries import (
+    ConfigEntry,
+    ConfigFlow,
+    ConfigFlowResult,
+    OptionsFlowWithReload,
+)
 from homeassistant.const import CONF_ADDRESS
+from homeassistant.core import callback
+from homeassistant.helpers.selector import (
+    SelectSelector,
+    SelectSelectorConfig,
+    SelectSelectorMode,
+)
 
 from .client import AuthError
-from .const import CONF_PIN, CONF_SERIAL, DOMAIN, NAME_PREFIX
+from .catalog import DEFAULT_KEYS, EXTRAS
+from .const import (
+    CONF_EXTRAS,
+    CONF_MODE,
+    CONF_PIN,
+    CONF_SERIAL,
+    DOMAIN,
+    MODE_ADVANCED,
+    MODE_SIMPLE,
+    NAME_PREFIX,
+)
 from .coordinator import CannotConnect, async_open_session
 from .pairing import InvalidPin, PairingError
 
@@ -30,6 +51,11 @@ def _clean_pin(pin: str) -> str:
 
 class RemehaConfigFlow(ConfigFlow, domain=DOMAIN):
     VERSION = 1
+
+    @staticmethod
+    @callback
+    def async_get_options_flow(config_entry: ConfigEntry) -> RemehaOptionsFlow:
+        return RemehaOptionsFlow()
 
     def __init__(self) -> None:
         self._address: str | None = None
@@ -112,4 +138,47 @@ class RemehaConfigFlow(ConfigFlow, domain=DOMAIN):
             data_schema=PIN_SCHEMA,
             errors=errors,
             description_placeholders={"name": self._name or ""},
+        )
+
+
+class RemehaOptionsFlow(OptionsFlowWithReload):
+    """Simple = the standard sensors. Advanced = tick any datapoint from the list."""
+
+    async def async_step_init(
+        self, user_input: dict[str, Any] | None = None
+    ) -> ConfigFlowResult:
+        if user_input is not None:
+            if user_input[CONF_MODE] == MODE_ADVANCED:
+                return await self.async_step_advanced()
+            return self.async_create_entry(data={CONF_MODE: MODE_SIMPLE})
+        mode = self.config_entry.options.get(CONF_MODE, MODE_SIMPLE)
+        return self.async_show_form(
+            step_id="init",
+            data_schema=vol.Schema({
+                vol.Required(CONF_MODE, default=mode): SelectSelector(SelectSelectorConfig(
+                    options=[MODE_SIMPLE, MODE_ADVANCED],
+                    translation_key=CONF_MODE,
+                    mode=SelectSelectorMode.LIST,
+                )),
+            }),
+        )
+
+    async def async_step_advanced(
+        self, user_input: dict[str, Any] | None = None
+    ) -> ConfigFlowResult:
+        if user_input is not None and CONF_EXTRAS in user_input:
+            return self.async_create_entry(
+                data={CONF_MODE: MODE_ADVANCED, CONF_EXTRAS: user_input[CONF_EXTRAS]}
+            )
+        chosen = self.config_entry.options.get(CONF_EXTRAS, DEFAULT_KEYS)
+        return self.async_show_form(
+            step_id="advanced",
+            data_schema=vol.Schema({
+                vol.Optional(CONF_EXTRAS, default=chosen): SelectSelector(SelectSelectorConfig(
+                    options=[e.key for e in EXTRAS],
+                    translation_key=CONF_EXTRAS,
+                    multiple=True,
+                    mode=SelectSelectorMode.LIST,
+                )),
+            }),
         )

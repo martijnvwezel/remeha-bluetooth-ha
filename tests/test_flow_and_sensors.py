@@ -118,3 +118,54 @@ async def test_session_decodes():
     assert d["energy_delivered_total"] == 840 and d["spf"] == 3.64
     assert d["energy_delivered_dhw"] is None
     assert d["status_code"] == 3 and d["substatus_code"] == 30
+
+
+async def test_session_decodes_extras():
+    from custom_components.remeha_bluetooth.catalog import BY_KEY
+    block = bytearray(b"\x00\x80" * 61)
+    block[76:78] = (400).to_bytes(2, "little")
+    fc = FakeClient(bytes(block), {0x43B5: (9).to_bytes(2, "little"),
+                                   0x4308: b"\x01", 0x530C: (209).to_bytes(4, "little"),
+                                   0x5404: b"\x00\x80"})
+    s = RemehaSession(fc)
+    await s.authenticate()
+    keys = ["electric_power", "pump_speed", "compressor_running", "compressor_hours",
+            "room_temperature", "heat_output"]
+    d = (await s.read_all([BY_KEY[k] for k in keys])).values
+    assert d["electric_power"] == 0.9 and d["pump_speed"] == 40
+    assert d["compressor_running"] is True and d["compressor_hours"] == 209
+    assert d["room_temperature"] is None and d["heat_output"] == 0  # 0000 0206 -> 0
+
+
+async def test_options_simple_and_advanced(hass):
+    entry = MockConfigEntry(domain=DOMAIN, unique_id=ADDR, title="Heat pump",
+                            data={"address": ADDR, "pin": "123456"})
+    entry.add_to_hass(hass)
+    values = dict(VALUES, electric_power=0.9, heat_output=3.6,
+                  compressor_running=True, compressor_frequency=29)
+    client = MagicMock(); client.disconnect = AsyncMock(); client.is_connected = True
+    s = MagicMock(); s.read_all = AsyncMock(return_value=RemehaData(values))
+    with patch("custom_components.remeha_bluetooth.coordinator.async_open_session",
+               AsyncMock(return_value=(client, s))):
+        assert await hass.config_entries.async_setup(entry.entry_id)
+        await hass.async_block_till_done()
+        assert hass.states.get("sensor.heat_pump_electrical_power").state == "0.9"
+        assert hass.states.get("binary_sensor.heat_pump_compressor_running") is None
+
+        r = await hass.config_entries.options.async_init(entry.entry_id)
+        assert r["step_id"] == "init"
+        r = await hass.config_entries.options.async_configure(r["flow_id"], {"mode": "advanced"})
+        assert r["step_id"] == "advanced"
+        r = await hass.config_entries.options.async_configure(
+            r["flow_id"], {"extras": ["compressor_running", "compressor_frequency"]})
+        assert r["type"] is FlowResultType.CREATE_ENTRY
+        await hass.async_block_till_done()
+        assert hass.states.get("binary_sensor.heat_pump_compressor_running").state == "on"
+        assert hass.states.get("sensor.heat_pump_compressor_frequency").state == "29"
+        assert hass.states.get("sensor.heat_pump_electrical_power") is None
+
+        r = await hass.config_entries.options.async_init(entry.entry_id)
+        r = await hass.config_entries.options.async_configure(r["flow_id"], {"mode": "simple"})
+        await hass.async_block_till_done()
+        assert hass.states.get("sensor.heat_pump_electrical_power").state == "0.9"
+        assert hass.states.get("binary_sensor.heat_pump_compressor_running") is None

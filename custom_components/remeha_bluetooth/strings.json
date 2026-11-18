@@ -111,6 +111,155 @@
       },
       "substatus": {
         "name": "Sub status"
+      },
+      "electric_power": {
+        "name": "Electrical power"
+      },
+      "heat_output": {
+        "name": "Heat output"
+      },
+      "compressor_frequency": {
+        "name": "Compressor frequency"
+      },
+      "compressor_current": {
+        "name": "Compressor current"
+      },
+      "odu_modulation": {
+        "name": "Outdoor unit modulation"
+      },
+      "supply_voltage": {
+        "name": "Outdoor unit supply voltage"
+      },
+      "water_flow": {
+        "name": "Water flow"
+      },
+      "odu_water_flow": {
+        "name": "Outdoor unit water flow"
+      },
+      "pump_speed": {
+        "name": "Pump speed"
+      },
+      "odu_pump_modulation": {
+        "name": "Outdoor unit pump modulation"
+      },
+      "hp_flow_setpoint": {
+        "name": "Heat pump flow setpoint"
+      },
+      "hp_return_temperature": {
+        "name": "Heat pump return temperature"
+      },
+      "average_flow_temperature": {
+        "name": "Average flow temperature"
+      },
+      "odu_flow_temperature": {
+        "name": "Outdoor unit flow temperature"
+      },
+      "odu_air_temperature": {
+        "name": "Outdoor unit air temperature"
+      },
+      "evaporator_temperature": {
+        "name": "Evaporator temperature"
+      },
+      "suction_temperature": {
+        "name": "Compressor suction temperature"
+      },
+      "discharge_temperature": {
+        "name": "Compressor discharge temperature"
+      },
+      "inverter_temperature": {
+        "name": "Inverter temperature"
+      },
+      "zone_flow_setpoint": {
+        "name": "Zone flow setpoint"
+      },
+      "room_temperature": {
+        "name": "Room temperature"
+      },
+      "room_setpoint": {
+        "name": "Room setpoint"
+      },
+      "calculated_room_setpoint": {
+        "name": "Calculated room setpoint"
+      },
+      "fan_speed": {
+        "name": "Outdoor fan speed"
+      },
+      "eev_opening": {
+        "name": "Expansion valve opening"
+      },
+      "seasonal_efficiency": {
+        "name": "Seasonal efficiency"
+      },
+      "energy_consumed_cooling": {
+        "name": "Electricity used cooling"
+      },
+      "energy_delivered_cooling": {
+        "name": "Cooling delivered"
+      },
+      "compressor_hours": {
+        "name": "Compressor hours"
+      },
+      "compressor_starts": {
+        "name": "Compressor starts"
+      },
+      "heating_hours": {
+        "name": "Heating hours"
+      },
+      "power_on_hours": {
+        "name": "Power-on hours"
+      },
+      "pump_hours": {
+        "name": "Pump hours"
+      },
+      "pump_starts": {
+        "name": "Pump starts"
+      },
+      "backup_heater_hours": {
+        "name": "Backup heater hours"
+      },
+      "backup_heater_starts": {
+        "name": "Backup heater starts"
+      },
+      "defrost_cycles": {
+        "name": "Defrost cycles"
+      },
+      "defrost_duration": {
+        "name": "Defrost duration"
+      },
+      "heating_curve_slope": {
+        "name": "Heating curve slope"
+      },
+      "heating_curve_base": {
+        "name": "Heating curve base point"
+      },
+      "max_flow_temperature": {
+        "name": "Maximum flow temperature"
+      },
+      "low_pressure_warning": {
+        "name": "Low water pressure warning"
+      }
+    },
+    "binary_sensor": {
+      "compressor_running": {
+        "name": "Compressor running"
+      },
+      "compressor_requested": {
+        "name": "Compressor requested"
+      },
+      "pump_running": {
+        "name": "Pump running"
+      },
+      "defrosting": {
+        "name": "Defrosting"
+      },
+      "heat_pump_error": {
+        "name": "Heat pump error"
+      },
+      "frost_protection": {
+        "name": "Frost protection"
+      },
+      "heating_enabled": {
+        "name": "Heating enabled"
       }
     }
   },
@@ -136,6 +285,85 @@
           "name": "Element",
           "description": "Array element (1, or 255 for scalar)"
         }
+      }
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Which sensors?",
+        "description": "**Simple**: the standard set (temperatures, COP, energy, status, power).\n\n**Advanced**: choose yourself from the full list of datapoints.",
+        "data": {
+          "mode": "Mode"
+        }
+      },
+      "advanced": {
+        "title": "Choose datapoints",
+        "description": "Tick what you want to see. Every extra item is one more Bluetooth read every 30 seconds. The code in brackets is the parameter code from the Remeha app.",
+        "data": {
+          "extras": "Datapoints"
+        }
+      }
+    }
+  },
+  "selector": {
+    "mode": {
+      "options": {
+        "simple": "Simple (recommended)",
+        "advanced": "Advanced: choose from the full list"
+      }
+    },
+    "extras": {
+      "options": {
+        "electric_power": "Electrical power (HM161)",
+        "heat_output": "Heat output (HM160)",
+        "compressor_frequency": "Compressor frequency",
+        "compressor_current": "Compressor current (HM062)",
+        "odu_modulation": "Outdoor unit modulation",
+        "supply_voltage": "Outdoor unit supply voltage (HM096)",
+        "water_flow": "Water flow (AM056)",
+        "odu_water_flow": "Outdoor unit water flow (HM110)",
+        "pump_speed": "Pump speed (AM010)",
+        "odu_pump_modulation": "Outdoor unit pump modulation (HM123)",
+        "hp_flow_setpoint": "Heat pump flow setpoint (HM003)",
+        "hp_return_temperature": "Heat pump return temperature (HM002)",
+        "average_flow_temperature": "Average flow temperature (HM020)",
+        "odu_flow_temperature": "Outdoor unit flow temperature (HM185)",
+        "odu_air_temperature": "Outdoor unit air temperature (HM098)",
+        "evaporator_temperature": "Evaporator temperature",
+        "suction_temperature": "Compressor suction temperature",
+        "discharge_temperature": "Compressor discharge temperature",
+        "inverter_temperature": "Inverter temperature (HM094)",
+        "zone_flow_setpoint": "Zone flow setpoint (CM070)",
+        "room_temperature": "Room temperature (CM030)",
+        "room_setpoint": "Room setpoint (CM190)",
+        "calculated_room_setpoint": "Calculated room setpoint (CM280)",
+        "fan_speed": "Outdoor fan speed",
+        "eev_opening": "Expansion valve opening",
+        "seasonal_efficiency": "Seasonal efficiency (AC083)",
+        "energy_consumed_cooling": "Electricity used cooling (AC089)",
+        "energy_delivered_cooling": "Cooling delivered",
+        "compressor_hours": "Compressor hours (PC003)",
+        "compressor_starts": "Compressor starts (PC002)",
+        "heating_hours": "Heating hours (PC000)",
+        "power_on_hours": "Power-on hours",
+        "pump_hours": "Pump hours",
+        "pump_starts": "Pump starts",
+        "backup_heater_hours": "Backup heater hours",
+        "backup_heater_starts": "Backup heater starts",
+        "defrost_cycles": "Defrost cycles (HC011)",
+        "defrost_duration": "Defrost duration (HC010)",
+        "heating_curve_slope": "Heating curve slope (CP230)",
+        "heating_curve_base": "Heating curve base point (CP210)",
+        "max_flow_temperature": "Maximum flow temperature (CP000)",
+        "low_pressure_warning": "Low water pressure warning (AP058)",
+        "compressor_running": "Compressor running (HM008)",
+        "compressor_requested": "Compressor requested (HM030)",
+        "pump_running": "Pump running (AM015)",
+        "defrosting": "Defrosting (HM009)",
+        "heat_pump_error": "Heat pump error (HM007)",
+        "frost_protection": "Frost protection",
+        "heating_enabled": "Heating enabled"
       }
     }
   }

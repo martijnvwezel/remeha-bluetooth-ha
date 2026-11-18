@@ -11,7 +11,8 @@ No cloud, no account, no extra hardware. You only need the **6-digit PIN** on th
 sticker of the Bluetooth module.
 
 You get: **what it is doing right now** (heating, hot water, standby, defrost ...), **COP** (now and average since installation), outdoor / flow / return / hot water temperatures, water pressure,
-and **electricity used** + **heat delivered** (kWh, works in the Energy dashboard).
+**electrical power** + **heat output** right now (kW), and **electricity used** + **heat delivered**
+(kWh, works in the Energy dashboard). Want more? Switch to **Advanced** and tick from ~50 datapoints.
 
 <img src="docs/sensors.png" width="320" alt="Heat pump sensors in Home Assistant">
 
@@ -47,6 +48,25 @@ Also add **Electricity used heating** and **Electricity used hot water**, and se
 The heat delivered sensors show how much heat you got for that electricity:
 heat delivered ÷ electricity used = your average COP (also shown as *Average COP (SPF)*).
 
+## Simple or Advanced
+
+Settings → Devices & services → **Remeha Bluetooth** → ⚙️ (Configure):
+
+- **Simple** (default): the standard set above. Enough for most people.
+- **Advanced**: a list of all known datapoints with the code from the Remeha app.
+  Tick what you want, for example compressor frequency and current, compressor running,
+  defrosting, pump speed, water flow, room temperature, compressor/refrigerant
+  temperatures, operating hours and starts, defrost cycles, seasonal efficiency
+  (AC083) and the heating curve settings (read only).
+
+Every ticked item adds one short Bluetooth read every 30 s. Items you untick
+are removed from Home Assistant. The list lives in
+[`catalog.py`](custom_components/remeha_bluetooth/catalog.py). To add one, add a line there and
+run `python3 tools/gen_translations.py`.
+
+Thanks to [esphome-remeha-confida](https://github.com/mcc-tweakers/esphome-remeha-confida),
+which confirmed several object indices.
+
 ## Nederlands, kort
 
 Zet Home Assistant (met Bluetooth) in de buurt van de warmtepomp, installeer deze
@@ -55,6 +75,9 @@ op **Toevoegen** bij `EHC-16_...`. Vul de 6-cijferige pincode van de sticker in.
 
 Stroomverbruik volgen: *Energie-instellingen → Individuele apparaten → Apparaat toevoegen*
 → kies **Heat pump Electricity used total**.
+
+Meer zien? *Remeha Bluetooth → ⚙️ Configureren → Geavanceerd* en vink aan wat je wilt
+(compressorfrequentie, ontdooien, debiet, draaiuren, stooklijn ...).
 
 ## Problems
 

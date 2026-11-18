@@ -15,8 +15,9 @@ from homeassistant.const import CONF_ADDRESS
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.update_coordinator import DataUpdateCoordinator, UpdateFailed
 
+from .catalog import BY_KEY, DEFAULT_KEYS, Extra
 from .client import AuthError, RemehaData, RemehaSession
-from .const import CONF_PIN, DOMAIN, UPDATE_INTERVAL_S
+from .const import CONF_EXTRAS, CONF_MODE, CONF_PIN, DOMAIN, MODE_ADVANCED, UPDATE_INTERVAL_S
 from .pairing import InvalidPin, PairingError, async_ensure_paired
 
 _LOGGER = logging.getLogger(__name__)
@@ -50,6 +51,14 @@ async def async_open_session(
     return client, session
 
 
+def active_extras(entry: ConfigEntry) -> list[Extra]:
+    """Optional datapoints to read: the defaults, or the user's pick in Advanced mode."""
+    keys = DEFAULT_KEYS
+    if entry.options.get(CONF_MODE) == MODE_ADVANCED:
+        keys = entry.options.get(CONF_EXTRAS, DEFAULT_KEYS)
+    return [BY_KEY[k] for k in keys if k in BY_KEY]
+
+
 class RemehaCoordinator(DataUpdateCoordinator[RemehaData]):
     """Keeps the BLE session open and reads all values every interval."""
 
@@ -65,6 +74,7 @@ class RemehaCoordinator(DataUpdateCoordinator[RemehaData]):
         self._client: BleakClient | None = None
         self._session: RemehaSession | None = None
         self._lock = asyncio.Lock()
+        self.extras: list[Extra] = active_extras(entry)
 
     async def _async_update_data(self) -> RemehaData:
         async with self._lock:
@@ -75,7 +85,7 @@ class RemehaCoordinator(DataUpdateCoordinator[RemehaData]):
                         self.hass, self.address, self._pin
                     )
                 assert self._session is not None
-                return await self._session.read_all()
+                return await self._session.read_all(self.extras)
             except InvalidPin as err:
                 await self._close()
                 raise UpdateFailed("The gateway refused the PIN") from err

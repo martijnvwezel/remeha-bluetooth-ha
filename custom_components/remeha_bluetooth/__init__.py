@@ -9,14 +9,15 @@ from homeassistant.const import CONF_ADDRESS, Platform
 from homeassistant.core import HomeAssistant, ServiceCall, ServiceResponse, SupportsResponse
 from homeassistant.exceptions import HomeAssistantError
 import homeassistant.helpers.config_validation as cv
+from homeassistant.helpers import entity_registry as er
 from homeassistant.helpers.typing import ConfigType
 
+from .catalog import BY_KEY
 from .const import DOMAIN
-
 from .coordinator import RemehaCoordinator
 from .pairing import async_remove_bond
 
-PLATFORMS = [Platform.SENSOR]
+PLATFORMS = [Platform.BINARY_SENSOR, Platform.SENSOR]
 
 type RemehaConfigEntry = ConfigEntry[RemehaCoordinator]
 
@@ -62,10 +63,21 @@ async def async_setup(hass: HomeAssistant, config: ConfigType) -> bool:
 
 async def async_setup_entry(hass: HomeAssistant, entry: RemehaConfigEntry) -> bool:
     coordinator = RemehaCoordinator(hass, entry)
+    _remove_unused_entities(hass, entry, {e.key for e in coordinator.extras})
     await coordinator.async_config_entry_first_refresh()
     entry.runtime_data = coordinator
     await hass.config_entries.async_forward_entry_setups(entry, PLATFORMS)
     return True
+
+
+def _remove_unused_entities(hass: HomeAssistant, entry: ConfigEntry, active: set[str]) -> None:
+    """Drop optional entities the user switched off, so no 'unavailable' leftovers."""
+    registry = er.async_get(hass)
+    prefix = f"{entry.data[CONF_ADDRESS]}_"
+    for ent in er.async_entries_for_config_entry(registry, entry.entry_id):
+        key = ent.unique_id.removeprefix(prefix)
+        if key in BY_KEY and key not in active:
+            registry.async_remove(ent.entity_id)
 
 
 async def async_unload_entry(hass: HomeAssistant, entry: RemehaConfigEntry) -> bool:

@@ -13,6 +13,7 @@ from dataclasses import dataclass, field
 from bleak import BleakClient
 
 from . import protocol as P
+from .catalog import MONITOR_BLOCK, Extra, block_bytes, decode
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -146,8 +147,8 @@ class RemehaSession:
             asm.reset()  # stale reply from an earlier read
         return None
 
-    async def read_all(self) -> RemehaData:
-        """Read everything the integration exposes."""
+    async def read_all(self, extras: tuple[Extra, ...] | list[Extra] = ()) -> RemehaData:
+        """Read the standard values plus the chosen optional datapoints."""
         values: dict[str, float | None] = {}
         block = await self.read(0x501D, 0, 1)
         if block is None or len(block) < 60:
@@ -167,4 +168,10 @@ class RemehaSession:
         # (the 0x508a SPF object returns no value on this firmware).
         used, made = values.get("energy_consumed_total"), values.get("energy_delivered_total")
         values["spf"] = round(made / used, 2) if used and made is not None else None
+        for extra in extras:
+            if extra.index == MONITOR_BLOCK:
+                raw = block_bytes(extra, block)
+            else:
+                raw = await self.read(extra.index, extra.sub, 1, timeout=2)
+            values[extra.key] = decode(extra, raw)
         return RemehaData(values)

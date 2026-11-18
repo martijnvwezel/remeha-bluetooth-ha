@@ -111,6 +111,155 @@
       },
       "substatus": {
         "name": "Substatus"
+      },
+      "electric_power": {
+        "name": "Elektrisch vermogen"
+      },
+      "heat_output": {
+        "name": "Warmte-afgifte"
+      },
+      "compressor_frequency": {
+        "name": "Compressorfrequentie"
+      },
+      "compressor_current": {
+        "name": "Stroom compressor"
+      },
+      "odu_modulation": {
+        "name": "Modulatie buitenunit"
+      },
+      "supply_voltage": {
+        "name": "Voedingsspanning buitenunit"
+      },
+      "water_flow": {
+        "name": "Waterdebiet"
+      },
+      "odu_water_flow": {
+        "name": "Waterdebiet buitenunit"
+      },
+      "pump_speed": {
+        "name": "Pomptoerental"
+      },
+      "odu_pump_modulation": {
+        "name": "Modulatie pomp buitenunit"
+      },
+      "hp_flow_setpoint": {
+        "name": "Setpunt aanvoer warmtepomp"
+      },
+      "hp_return_temperature": {
+        "name": "Retourtemperatuur warmtepomp"
+      },
+      "average_flow_temperature": {
+        "name": "Gemiddelde aanvoertemperatuur"
+      },
+      "odu_flow_temperature": {
+        "name": "Aanvoertemperatuur buitenunit"
+      },
+      "odu_air_temperature": {
+        "name": "Luchttemperatuur buitenunit"
+      },
+      "evaporator_temperature": {
+        "name": "Verdampertemperatuur"
+      },
+      "suction_temperature": {
+        "name": "Zuiggastemperatuur compressor"
+      },
+      "discharge_temperature": {
+        "name": "Persgastemperatuur compressor"
+      },
+      "inverter_temperature": {
+        "name": "Invertertemperatuur"
+      },
+      "zone_flow_setpoint": {
+        "name": "Setpunt aanvoer zone"
+      },
+      "room_temperature": {
+        "name": "Kamertemperatuur"
+      },
+      "room_setpoint": {
+        "name": "Gewenste kamertemperatuur"
+      },
+      "calculated_room_setpoint": {
+        "name": "Berekende kamertemperatuur"
+      },
+      "fan_speed": {
+        "name": "Ventilatortoerental buitenunit"
+      },
+      "eev_opening": {
+        "name": "Opening expansieventiel"
+      },
+      "seasonal_efficiency": {
+        "name": "Seizoensrendement"
+      },
+      "energy_consumed_cooling": {
+        "name": "Stroomverbruik koelen"
+      },
+      "energy_delivered_cooling": {
+        "name": "Koeling geleverd"
+      },
+      "compressor_hours": {
+        "name": "Draaiuren compressor"
+      },
+      "compressor_starts": {
+        "name": "Starts compressor"
+      },
+      "heating_hours": {
+        "name": "Uren verwarmen"
+      },
+      "power_on_hours": {
+        "name": "Uren aan"
+      },
+      "pump_hours": {
+        "name": "Draaiuren pomp"
+      },
+      "pump_starts": {
+        "name": "Starts pomp"
+      },
+      "backup_heater_hours": {
+        "name": "Uren elektrisch element"
+      },
+      "backup_heater_starts": {
+        "name": "Starts elektrisch element"
+      },
+      "defrost_cycles": {
+        "name": "Aantal ontdooicycli"
+      },
+      "defrost_duration": {
+        "name": "Ontdooiduur"
+      },
+      "heating_curve_slope": {
+        "name": "Stooklijn helling"
+      },
+      "heating_curve_base": {
+        "name": "Stooklijn voetpunt"
+      },
+      "max_flow_temperature": {
+        "name": "Maximale aanvoertemperatuur"
+      },
+      "low_pressure_warning": {
+        "name": "Waarschuwing lage waterdruk"
+      }
+    },
+    "binary_sensor": {
+      "compressor_running": {
+        "name": "Compressor aan"
+      },
+      "compressor_requested": {
+        "name": "Compressor gevraagd"
+      },
+      "pump_running": {
+        "name": "Pomp aan"
+      },
+      "defrosting": {
+        "name": "Ontdooien"
+      },
+      "heat_pump_error": {
+        "name": "Storing warmtepomp"
+      },
+      "frost_protection": {
+        "name": "Vorstbeveiliging"
+      },
+      "heating_enabled": {
+        "name": "Verwarmen ingeschakeld"
       }
     }
   },
@@ -136,6 +285,85 @@
           "name": "Element",
           "description": "Array element (1, or 255 for scalar)"
         }
+      }
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Welke sensoren?",
+        "description": "**Eenvoudig**: de standaardset (temperaturen, COP, energie, status, vermogen).\n\n**Geavanceerd**: kies zelf uit de volledige lijst met datapunten.",
+        "data": {
+          "mode": "Modus"
+        }
+      },
+      "advanced": {
+        "title": "Kies datapunten",
+        "description": "Vink aan wat je wilt zien. Elk extra item is één Bluetooth-uitlezing extra per 30 seconden. De code tussen haakjes is de parametercode uit de Remeha-app.",
+        "data": {
+          "extras": "Datapunten"
+        }
+      }
+    }
+  },
+  "selector": {
+    "mode": {
+      "options": {
+        "simple": "Eenvoudig (aanbevolen)",
+        "advanced": "Geavanceerd: kies uit de volledige lijst"
+      }
+    },
+    "extras": {
+      "options": {
+        "electric_power": "Elektrisch vermogen (HM161)",
+        "heat_output": "Warmte-afgifte (HM160)",
+        "compressor_frequency": "Compressorfrequentie",
+        "compressor_current": "Stroom compressor (HM062)",
+        "odu_modulation": "Modulatie buitenunit",
+        "supply_voltage": "Voedingsspanning buitenunit (HM096)",
+        "water_flow": "Waterdebiet (AM056)",
+        "odu_water_flow": "Waterdebiet buitenunit (HM110)",
+        "pump_speed": "Pomptoerental (AM010)",
+        "odu_pump_modulation": "Modulatie pomp buitenunit (HM123)",
+        "hp_flow_setpoint": "Setpunt aanvoer warmtepomp (HM003)",
+        "hp_return_temperature": "Retourtemperatuur warmtepomp (HM002)",
+        "average_flow_temperature": "Gemiddelde aanvoertemperatuur (HM020)",
+        "odu_flow_temperature": "Aanvoertemperatuur buitenunit (HM185)",
+        "odu_air_temperature": "Luchttemperatuur buitenunit (HM098)",
+        "evaporator_temperature": "Verdampertemperatuur",
+        "suction_temperature": "Zuiggastemperatuur compressor",
+        "discharge_temperature": "Persgastemperatuur compressor",
+        "inverter_temperature": "Invertertemperatuur (HM094)",
+        "zone_flow_setpoint": "Setpunt aanvoer zone (CM070)",
+        "room_temperature": "Kamertemperatuur (CM030)",
+        "room_setpoint": "Gewenste kamertemperatuur (CM190)",
+        "calculated_room_setpoint": "Berekende kamertemperatuur (CM280)",
+        "fan_speed": "Ventilatortoerental buitenunit",
+        "eev_opening": "Opening expansieventiel",
+        "seasonal_efficiency": "Seizoensrendement (AC083)",
+        "energy_consumed_cooling": "Stroomverbruik koelen (AC089)",
+        "energy_delivered_cooling": "Koeling geleverd",
+        "compressor_hours": "Draaiuren compressor (PC003)",
+        "compressor_starts": "Starts compressor (PC002)",
+        "heating_hours": "Uren verwarmen (PC000)",
+        "power_on_hours": "Uren aan",
+        "pump_hours": "Draaiuren pomp",
+        "pump_starts": "Starts pomp",
+        "backup_heater_hours": "Uren elektrisch element",
+        "backup_heater_starts": "Starts elektrisch element",
+        "defrost_cycles": "Aantal ontdooicycli (HC011)",
+        "defrost_duration": "Ontdooiduur (HC010)",
+        "heating_curve_slope": "Stooklijn helling (CP230)",
+        "heating_curve_base": "Stooklijn voetpunt (CP210)",
+        "max_flow_temperature": "Maximale aanvoertemperatuur (CP000)",
+        "low_pressure_warning": "Waarschuwing lage waterdruk (AP058)",
+        "compressor_running": "Compressor aan (HM008)",
+        "compressor_requested": "Compressor gevraagd (HM030)",
+        "pump_running": "Pomp aan (AM015)",
+        "defrosting": "Ontdooien (HM009)",
+        "heat_pump_error": "Storing warmtepomp (HM007)",
+        "frost_protection": "Vorstbeveiliging",
+        "heating_enabled": "Verwarmen ingeschakeld"
       }
     }
   }
