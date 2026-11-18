@@ -20,17 +20,21 @@ You get: **what it is doing right now** (heating, hot water, standby, defrost ..
 
 1. Home Assistant must be **close to the heat pump** and have Bluetooth
    (built-in Bluetooth or a USB Bluetooth stick on the Home Assistant machine).
-2. Install [HACS](https://hacs.xyz) if you don't have it.
-3. Click the **Open in HACS** button above (or HACS → ⋮ → *Custom repositories* →
-   `https://github.com/martijnvwezel/remeha-bluetooth-ha`, type *Integration*),
-   then *Download*.
-4. Restart Home Assistant.
-5. Settings → Devices & services. Your heat pump shows up under **Discovered**
+2. Get the integration:
+   - **Home Assistant 2026.11 or newer**: Settings → **Marketplace** → *Add from link* →
+     `https://github.com/martijnvwezel/remeha-bluetooth-ha` → *Add* (connect GitHub when asked),
+     then open **Remeha Bluetooth** → *Install*.
+   - **Older versions**: install [HACS](https://hacs.xyz), click the **Open in HACS** button above
+     (or HACS → ⋮ → *Custom repositories* → the link above, type *Integration*), then *Download*.
+3. Restart Home Assistant.
+4. Settings → Devices & services. Your heat pump shows up under **Discovered**
    (named `EHC-16_...`). Click **Add**.
-6. Type the PIN from the sticker → **Submit**. Wait up to a minute. Done:
+5. Type the PIN from the sticker → **Submit**. Wait up to a minute. Done:
    a device **Heat pump** with sensors like `sensor.heat_pump_cop`.
 
-No HACS? Copy the folder `custom_components/remeha_bluetooth` into
+New versions show up under Settings → Updates.
+
+Manual install? Copy the folder `custom_components/remeha_bluetooth` into
 `/config/custom_components/` and restart.
 
 ## Track the heat pump in the Energy dashboard
@@ -72,7 +76,7 @@ which confirmed several object indices.
 ## Nederlands, kort
 
 Zet Home Assistant (met Bluetooth) in de buurt van de warmtepomp, installeer deze
-integratie via HACS, herstart, en klik bij *Instellingen → Apparaten & diensten*
+integratie via *Instellingen → Marketplace → Toevoegen via link* (of HACS op oudere versies), herstart, en klik bij *Instellingen → Apparaten & diensten*
 op **Toevoegen** bij `EHC-16_...`. Vul de 6-cijferige pincode van de sticker in. Klaar.
 
 Stroomverbruik volgen: *Energie-instellingen → Individuele apparaten → Apparaat toevoegen*
